@@ -1,1 +1,60 @@
+import random
+import math
+import matplotlib.pyplot as plt
 
+
+def gen_u():
+    return random.random()
+
+
+def poisson(lmbda):
+    x = -1
+    s = 1
+    q = math.exp(-lmbda)
+
+    while s > q:
+        s *= gen_u()
+        x += 1
+
+    return x
+
+def normal(mu, sigma):
+    u1 = gen_u()
+    u2 = gen_u()
+
+    z = math.sqrt(-2 * math.log(u1)) * math.cos(2 * math.pi * u2)
+    return mu + sigma * z
+
+
+def main():
+    print("Generatory rozkładów")
+
+    n = int(input("Ile liczb: "))
+
+    if input("Seed? (t/n): ").lower() == 't':
+        random.seed(int(input("Podaj seed: ")))
+
+    lmbda = float(input("Lambda: "))
+    mu = float(input("Średnia: "))
+    sigma = float(input("Odchylenie: "))
+
+    poisson_data = [poisson(lmbda) for _ in range(n)]
+    normal_data = [normal(mu, sigma) for _ in range(n)]
+
+
+    fig, ax = plt.subplots(1, 2)
+
+    ax[0].hist(poisson_data, bins=20)
+    ax[0].set_title(f"Poisson (λ={lmbda})")
+    ax[0].set_xlabel("Wartości")
+    ax[0].set_ylabel("Częstość")
+
+    ax[1].hist(normal_data, bins=20)
+    ax[1].set_title(f"Normalny (μ={mu}, σ={sigma})")
+    ax[1].set_xlabel("Wartości")
+    ax[1].set_ylabel("Częstość")
+
+    plt.show()
+
+if __name__ == "__main__":
+    main()
