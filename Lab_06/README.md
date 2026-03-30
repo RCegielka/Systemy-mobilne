@@ -1,0 +1,1 @@
+Zadania rozwiazane w pliku 
